@@ -12,8 +12,8 @@ class RevitCentralParametrization(Parametrization):
       gemaal_parameters.geometry_information.params_button = SetParamsButton("Generate table values", "set_param_ifc", longpoll=True)
       gemaal_parameters.geometry_information.lb = LineBreak()
       gemaal_parameters.geometry_information.table = Table('Geometry table')
-      gemaal_parameters.geometry_information.table.element = TextField('Element')
       gemaal_parameters.geometry_information.table.tag = TextField('Tag')
+      gemaal_parameters.geometry_information.table.element = TextField('Element')
       gemaal_parameters.geometry_information.table.length = NumberField('Length')
 
 
