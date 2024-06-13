@@ -24,6 +24,3 @@ class RevitCentralController(ViktorController):
     def get_ifc_view(self, params, **kwargs):
         ifc = File.from_path(Path(__file__).parent / 'Project1.ifc')
         return IFCResult(ifc)
-
-
-    def
