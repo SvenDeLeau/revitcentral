@@ -32,7 +32,5 @@ class RevitCentralController(ViktorController):
     def set_param_ifc(self, params, **kwargs):
         updated_parameter_set = params.gemaal_parameters.user_case.new
         model = ifcopenshell.open(Path(__file__).parent / 'Project1.ifc')
-        print(model.by_id(int(updated_parameter_set[0])))
-    
 
         return SetParamsResult(updated_parameter_set)
