@@ -11,7 +11,7 @@ from .parametrization import RevitCentralParametrization
 
 class RevitCentralController(ViktorController):
     """
-    This is the controller class of the entity WatKostEenGemaal.
+    This is the controller class of the entity revitcentral.
     """
 
     viktor_enforce_field_constraints = True
