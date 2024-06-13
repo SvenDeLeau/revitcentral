@@ -1,8 +1,5 @@
 viktor==14.10.0
 
-# TauwGis
-./dependencies/TauwGis-0.3.0b4-cp310-none-manylinux2014_x86_64.whl ; platform_system != 'Windows'
-
 # Developers
 pycodestyle; platform_system == 'Windows'
 pylint; platform_system == 'Windows'
