@@ -1,0 +1,1 @@
+Move the .extension folder to your PyRevit\Extensions folder and reload PyRevit
