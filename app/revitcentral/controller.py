@@ -45,8 +45,8 @@ class RevitCentralController(ViktorController):
             print(psets)
             geometry_table_dict = {
                 'tag': elem.get_info()['Tag'],
-                'element': psets['Pset_ReinforcementBarPitchOfBeam']['Description'],
-                'length': psets['Pset_BeamCommon']['Span']}
+                'element': psets['Text']['MHP_PRO_Name'],
+                'length': psets['Dimensions']['Length']}
             
             geometry_table_list.append(geometry_table_dict)
     
