@@ -1,4 +1,4 @@
-from viktor.parametrization import Parametrization, Step, BooleanField, Section, GeometryMultiSelectField, SetParamsButton
+from viktor.parametrization import Parametrization, Step, BooleanField, Section, GeometryMultiSelectField, FileField, SetParamsButton
 
 class RevitCentralParametrization(Parametrization):
 
@@ -10,3 +10,4 @@ class RevitCentralParametrization(Parametrization):
       gemaal_parameters.user_case.params_button = SetParamsButton("Set params", "set_param_ifc", longpoll=True)
 
 
+      gemaal_parameters.user_case.file = FileField ("IFC from Revit")

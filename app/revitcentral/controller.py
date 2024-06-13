@@ -24,8 +24,8 @@ class RevitCentralController(ViktorController):
 
     @IFCView("IFC view", duration_guess=1)
     def get_ifc_view(self, params, **kwargs):
-        ifc = File.from_path(Path(__file__).parent / 'Project1.ifc')
-        model = ifcopenshell.open(Path(__file__).parent / 'Project1.ifc')
+        ifc = params.gemaal_parameters.user_case.file
+        model = ifcopenshell.open(ifc)
         
         return IFCResult(ifc)
     
