@@ -5,6 +5,7 @@ class RevitCentralParametrization(Parametrization):
       gemaal_parameters = Step("Geometry data selection", views='get_ifc_view')
       gemaal_parameters.user_case = Section("Geometry selection")
       gemaal_parameters.user_case.file = FileField ("IFC from Revit")
+      gemaal_parameters.user_case.numbertorevit =  NumberField('Enter a value')
 
       gemaal_parameters.geometry_information = Section("Geometry information")
       gemaal_parameters.geometry_information.new = GeometryMultiSelectField("Select geometry")
@@ -14,4 +15,5 @@ class RevitCentralParametrization(Parametrization):
       gemaal_parameters.geometry_information.table.element = TextField('Element')
       gemaal_parameters.geometry_information.table.tag = TextField('Tag')
       gemaal_parameters.geometry_information.table.length = NumberField('Length')
+
 
