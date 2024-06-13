@@ -1,10 +1,10 @@
-"""Pulls data from the VIKTOR Platform."""
 from viktor.api import API, ask_for_personal_access_token
 from viktor.variables import get_viktor_doc_var, set_viktor_doc_data, get_viktor_global_var
 from viktor.forms import VIKTORWindow
 from pyrevit import forms
 from pyrevit.framework import Input
 from Autodesk.Revit.UI import TaskDialog
+from Autodesk.Revit.DB import Transaction, StorageType, ElementId
 import json
 
 doc = __revit__.ActiveUIDocument.Document
@@ -52,9 +52,9 @@ class PullDataWindow(VIKTORWindow):
 
                 pb.title = "Pulling data from VIKTOR platform ..."
                 pb.update_progress(2, 3)
+                
+                # DEBUG: Pull and display data
                 data = api.get_entity_data(workspace_id=workspace_id, entity_id=entity_id)
-
-                # Display the entire data structure for debugging in TaskDialog
                 TaskDialog.Show("VIKTOR Pull Data", "Pulled data: {}".format(json.dumps(data, indent=4)))
 
                 # Extracting the specific float value
@@ -64,10 +64,40 @@ class PullDataWindow(VIKTORWindow):
                     float_value = 'N/A'
 
                 pb.update_progress(3, 3)
-
-                # Display the pulled float value in the valueTextBox and a TaskDialog
                 self.valueTextBox.Text = str(float_value)
                 TaskDialog.Show("VIKTOR Pull Data", "Pulled float value: {}".format(float_value))
+
+                # Example hardcoded profile data
+                pulled_profile_str = "IPE200,200,100,5.6,8.5,12"  # TEMPORARY HARDCODED
+
+                # Parsing the profile data
+                profile_parts = pulled_profile_str.split(',')
+                conversion_factor = 3.28084/1000  # meters to feet conversion factor
+                profile_data = {
+                    "h": float(profile_parts[1]) * conversion_factor,
+                    "b": float(profile_parts[2]) * conversion_factor,
+                    "Tw": float(profile_parts[3]) * conversion_factor,
+                    "Tf": float(profile_parts[4]) * conversion_factor,
+                    "r": float(profile_parts[5]) * conversion_factor
+                }
+
+                # Display the pulled profile data in the valueTextBox and a TaskDialog
+                self.valueTextBox.Text = str(profile_data)
+                TaskDialog.Show("VIKTOR Pull Data", "Pulled profile data: {}".format(json.dumps(profile_data, indent=4)))
+
+                tag = 319234  # hardcoded family instance ID
+
+                # Updating Revit family parameters
+                t = Transaction(doc, "Update Beam Profile")
+                t.Start()
+                family_instance_id = ElementId(tag)  # Convert to ElementId
+                family_instance = doc.GetElement(family_instance_id)
+                if family_instance:
+                    for param_name, param_value in profile_data.items():
+                        param = family_instance.LookupParameter(param_name)
+                        if param and param.StorageType == StorageType.Double:
+                            param.Set(param_value)
+                t.Commit()
 
             except ValueError as err:
                 forms.alert(str(err), exitscript=True)
