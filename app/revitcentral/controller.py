@@ -9,7 +9,7 @@ from viktor.views import IFCResult, IFCView
 from .parametrization import RevitCentralParametrization
 
 
-class RevitCentral(ViktorController):
+class RevitCentralController(ViktorController):
     """
     This is the controller class of the entity WatKostEenGemaal.
     """
