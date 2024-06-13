@@ -35,18 +35,18 @@ class RevitCentralController(ViktorController):
 
         temp_f = NamedTemporaryFile(suffix=".ifc", delete=False, mode="w")
         temp_f.write(params.gemaal_parameters.user_case.file.file.getvalue())
-        
         model = ifcopenshell.open(Path(temp_f.name))
+
         geometry_table_list = []
 
         for element in selected_geometries:
             elem = model.by_id(int(element))
-            psets = ifcopenshell.util.element.get_psets(elem)['Pset_BeamCommon']
-            # print(psets[])
+            psets = ifcopenshell.util.element.get_psets(elem)
+            print(psets)
             geometry_table_dict = {
-                'element': elem.get_info()['ObjectType'],
                 'tag': elem.get_info()['Tag'],
-                'length': psets['Span']}
+                'element': psets['Pset_ReinforcementBarPitchOfBeam']['Description'],
+                'length': psets['Pset_BeamCommon']['Span']}
             
             geometry_table_list.append(geometry_table_dict)
     
