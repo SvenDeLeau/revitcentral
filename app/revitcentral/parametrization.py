@@ -1,7 +1,7 @@
-from viktor.parametrization import Parametrization, Step, BooleanField, Section
+from viktor.parametrization import Parametrization, Step, BooleanField, Section, GeometrySelectField
 
 class RevitCentralParametrization(Parametrization):
 
-      gemaal_parameters = Step("Selecteer opties voor het gemaal", views='get_ifc_view')
-      gemaal_parameters.user_case = Section("Project fase")
-      gemaal_parameters.user_case.new = BooleanField("Ik wil een nieuw gemaal bouwen")
+      gemaal_parameters = Step("Geometry data selection", views='get_ifc_view')
+      gemaal_parameters.user_case = Section("Geometry selection")
+      gemaal_parameters.user_case.new = GeometrySelectField("Select geometry")
