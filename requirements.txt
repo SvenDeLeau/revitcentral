@@ -1,5 +1,4 @@
 viktor==14.10.0
-
 ifcopenshell==0.7.0.240521
 
 # Developers
