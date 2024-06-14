@@ -5,13 +5,14 @@ from pyrevit import forms
 from pyrevit.framework import Input
 from Autodesk.Revit.UI import TaskDialog
 from Autodesk.Revit.DB import Transaction, StorageType, ElementId
+import ast
 import json
 
 doc = __revit__.ActiveUIDocument.Document
 
 
-class PullDataWindow(VIKTORWindow):
-    """VIKTOR Pull Data window"""
+class Pullchild_dataWindow(VIKTORWindow):
+    """VIKTOR Pull child_data window"""
 
     def __init__(self):
         VIKTORWindow.__init__(self, "VIKTORPullWindow.xaml")
@@ -50,64 +51,80 @@ class PullDataWindow(VIKTORWindow):
                 api = API(environment=environment, token=token)
                 api.verify()
 
-                pb.title = "Pulling data from VIKTOR platform ..."
+                pb.title = "Pulling child_data from VIKTOR platform ..."
                 pb.update_progress(2, 3)
                 
-                # DEBUG: Pull and display data
-                data = api.get_entity_data(workspace_id=workspace_id, entity_id=entity_id)
-                TaskDialog.Show("VIKTOR Pull Data", "Pulled data: {}".format(json.dumps(data, indent=4)))
+                # Pull and display child_data for debugging
+                child_data = api.get_all_child_entity_data(workspace_id=workspace_id, entity_id=entity_id)
+                TaskDialog.Show("VIKTOR Pull child_data", "Pulled child_data: {}".format(json.dumps(child_data, indent=4)))
 
-                # Extracting the specific float value
-                try:
-                    float_value = data['parameters']['gemaal_parameters']['user_case']['numbertorevit']
-                except KeyError:
-                    float_value = 'N/A'
+
+
+
 
                 pb.update_progress(3, 3)
-                self.valueTextBox.Text = str(float_value)
-                TaskDialog.Show("VIKTOR Pull Data", "Pulled float value: {}".format(float_value))
 
-                # Example hardcoded profile data
-                pulled_profile_str = "IPE200,200,100,5.6,8.5,12"  # TEMPORARY HARDCODED
+                for index, child_entity in enumerate(child_data):
+                    all_profile_child_data = []
+                    all_tags = []
+                    chosen_profile_str = child_data[index]['properties']['input']['chosenprofile']
+                    TaskDialog.Show("VIKTOR Pull child_data", "Pulled profile child_data: {}".format(json.dumps(chosen_profile_str, indent=4)))
+                    chosen_profile_str = chosen_profile_str.strip('[]')  # Remove the surrounding square brackets
+                    profile_list = ast.literal_eval(chosen_profile_str)  # Convert string representation of list to actual list
+                    pulled_profile_str = ",".join(map(str, profile_list))
 
-                # Parsing the profile data
-                profile_parts = pulled_profile_str.split(',')
-                conversion_factor = 3.28084/1000  # meters to feet conversion factor
-                profile_data = {
-                    "h": float(profile_parts[1]) * conversion_factor,
-                    "b": float(profile_parts[2]) * conversion_factor,
-                    "Tw": float(profile_parts[3]) * conversion_factor,
-                    "Tf": float(profile_parts[4]) * conversion_factor,
-                    "r": float(profile_parts[5]) * conversion_factor
-                }
+                    # Extract the tag (family instance ID) from the child child_data
+                    try:
+                        tag = int(child_data[index]['name'])
+                    except (KeyError, ValueError):
+                        tag = None
 
-                # Display the pulled profile data in the valueTextBox and a TaskDialog
-                self.valueTextBox.Text = str(profile_data)
-                TaskDialog.Show("VIKTOR Pull Data", "Pulled profile data: {}".format(json.dumps(profile_data, indent=4)))
+                    if tag is None:
+                        forms.alert("Could not find valid 'name' in the child_data.", exitscript=True)
+                        return
 
-                tag = 319234  # hardcoded family instance ID
+                    # Parsing the profile child_data
+                    profile_parts = pulled_profile_str.split(',')
+                    conversion_factor = 3.28084/1000  # meters to feet conversion factor
+                    profile_child_data = {
+                        "h": float(profile_parts[1]) * conversion_factor,
+                        "b": float(profile_parts[2]) * conversion_factor,
+                        "tw": float(profile_parts[3]) * conversion_factor,
+                        "tf": float(profile_parts[4]) * conversion_factor,
+                        "r": float(profile_parts[5]) * conversion_factor
+                    }
+                    all_profile_child_data.append(profile_child_data)
+                    all_tags.append(tag)
+
+                # Display the pulled profile child_data in the valueTextBox and a TaskDialog
+                self.valueTextBox.Text = str(all_profile_child_data)
+                TaskDialog.Show("VIKTOR Pull child_data", "Pulled profile child_data: {}".format(json.dumps(all_profile_child_data, indent=4)))
 
                 # Updating Revit family parameters
                 t = Transaction(doc, "Update Beam Profile")
                 t.Start()
-                family_instance_id = ElementId(tag)  # Convert to ElementId
-                family_instance = doc.GetElement(family_instance_id)
-                if family_instance:
-                    for param_name, param_value in profile_data.items():
-                        param = family_instance.LookupParameter(param_name)
-                        if param and param.StorageType == StorageType.Double:
-                            param.Set(param_value)
-                t.Commit()
+                for index, elementID  in enumerate(all_tags):
+                    family_instance_id = ElementId(elementID)  # Convert to ElementId
+                    family_instance = doc.GetElement(family_instance_id)
+                    if family_instance:
+                        for param_name, param_value in all_profile_child_data[index].items():
+                            param = family_instance.LookupParameter(param_name)
+                            if param and param.StorageType == StorageType.Double:
+                                param.Set(param_value)
+                        # Set the Viktor_Change parameter to true
+                        viktor_change_param = family_instance.LookupParameter("Viktor_Change")
+                        if viktor_change_param and viktor_change_param.StorageType == StorageType.Integer:
+                            viktor_change_param.Set(1)  # 1 corresponds to TRUE in Revit's integer parameters
+                    t.Commit()
 
             except ValueError as err:
                 forms.alert(str(err), exitscript=True)
 
         forms.toast(
-            "Data successfully pulled from VIKTOR!",
+            "child_data successfully pulled from VIKTOR!",
             title="VIKTOR Pull", appid="VIKTOR"
         )
         self.Close()
 
-
 if __name__ == '__main__':
-    PullDataWindow().show_dialog()
+    Pullchild_dataWindow().show_dialog()
