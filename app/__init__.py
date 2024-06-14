@@ -13,6 +13,7 @@ from viktor import InitialEntity
 # Local imports
 from .project.controller import ProjectController
 from .revitcentral.controller import RevitCentralController
+from .Beam.beamcontroller import BeamController
 
 initial_entities = [
     InitialEntity(
