@@ -5,16 +5,11 @@ class RevitCentralParametrization(Parametrization):
       parameters = Step("Geometry data selection", views='get_ifc_view')
       parameters.user_case = Section("Geometry selection")
       parameters.user_case.file = FileField ("IFC from Revit")
-      # parameters.user_case.numbertorevit =  NumberField('Enter a value')
 
       parameters.geometry_information = Section("Geometry information")
       parameters.geometry_information.new = GeometryMultiSelectField("Select geometry")
       parameters.geometry_information.params_button = SetParamsButton("Get Beam Values", "set_param_ifc", longpoll=True)
       parameters.geometry_information.lb = LineBreak()
-      # parameters.geometry_information.table = Table('Geometry table')
-      # parameters.geometry_information.table.tag = TextField('Tag')
-      # parameters.geometry_information.table.element = TextField('Element')
-      # parameters.geometry_information.table.length = NumberField('Length')
 
       parameters.geometry_information.beamentitymanager = ChildEntityManager ('BeamController')
 
