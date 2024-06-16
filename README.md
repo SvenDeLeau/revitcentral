@@ -12,7 +12,7 @@ The implementation of how you process and utilize this data is flexible and cust
 
 #### Revit Plugin Installation
 Instructions on how to install the Revit plugin can be found in `revitcentral\Revit plugins\Plugin installation Readme.txt`.
-The example Revit model can be found in `revitcentral\Viktor_test_project.rvt`.
+The example Revit model can be found in `revitcentral\Revit model\Viktor_test_project.rvt`.
 
 #### VIKTOR App Installation
 1. **Clone the Repository**:
