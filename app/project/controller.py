@@ -5,5 +5,5 @@ class ProjectController(ViktorController):
     viktor_convert_entity_field = True
 
     label = 'Project'
-    children = ['RevitCentralController']
+    children = ['RevitPushPullController']
     show_children_as = 'Table'

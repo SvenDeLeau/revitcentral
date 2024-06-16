@@ -12,7 +12,7 @@ from viktor import InitialEntity
 
 # Local imports
 from .project.controller import ProjectController
-from .revitcentral.controller import RevitCentralController
+from .revitcentral.controller import RevitPushPullController
 from .Beam.beamcontroller import BeamController
 
 initial_entities = [
@@ -20,7 +20,7 @@ initial_entities = [
         "ProjectController",
         name="Project",
         children=[
-            InitialEntity("RevitCentralController", name="RevitCentralConverter"),
+            InitialEntity("RevitPushPullController", name="RevitCentralConverter"),
         ],
     )
 ]

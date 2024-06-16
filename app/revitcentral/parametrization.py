@@ -1,6 +1,6 @@
 from viktor.parametrization import Parametrization, ChildEntityManager, Step, BooleanField, Section, GeometryMultiSelectField, FileField, SetParamsButton, Table, TextField, NumberField, LineBreak
 
-class RevitCentralParametrization(Parametrization):
+class RevitPushPullParametrization(Parametrization):
 
       parameters = Step("Geometry data selection", views='get_ifc_view')
       parameters.user_case = Section("Geometry selection")

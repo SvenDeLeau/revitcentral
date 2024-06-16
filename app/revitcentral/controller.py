@@ -9,11 +9,11 @@ from viktor.views import IFCResult, IFCView
 from viktor.result import SetParamsResult
 
 # Local imports
-from .parametrization import RevitCentralParametrization
+from .parametrization import RevitPushPullParametrization
 
-class RevitCentralController(ViktorController):
+class RevitPushPullController(ViktorController):
     """
-    This is the controller class for the RevitCentral entity.
+    This is the controller class for the RevitPushPull entity.
     It manages IFC views and handles interactions with the VIKTOR API.
     """
     
@@ -21,7 +21,7 @@ class RevitCentralController(ViktorController):
     label = "Revit Central Converter"
     children = ['BeamController']
     show_children_as = 'Table'
-    parametrization = RevitCentralParametrization(width=60)
+    parametrization = RevitPushPullParametrization(width=60)
 
     @IFCView("IFC view", duration_guess=1)
     def get_ifc_view(self, params, **kwargs):
