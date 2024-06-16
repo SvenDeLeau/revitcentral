@@ -13,6 +13,7 @@ The implementation of how you process and utilize this data is flexible and cust
 #### Revit Plugin Installation
 Instructions on how to install the Revit plugin can be found in `revitcentral\Revit plugins\Plugin installation Readme.txt`.
 The example Revit model can be found in `revitcentral\Revit model\Viktor_test_project.rvt`.
+The plugin pull script can be found in `revitcentral\Revit plugins\VIKTORPlugin.extension\VIKTOR.tab\Data.panel\Pull.pushbutton\script.py` (This will require modification based on your implementation needs)
 
 #### VIKTOR App Installation
 1. **Clone the Repository**:
